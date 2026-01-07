@@ -1,42 +1,39 @@
-﻿// Головнич Вікторія КН-21
+﻿// Головнич Вікторія КН21
+// Тема лабораторної роботи №2 - "Магазин побутової техніки"
 
 using System;
-namespace FarmerMarketApp
-{
-    class Program
-    {
-        private static readonly double priceApples = 15.50;
-        private static readonly double priceMilk = 32.00;
-        private static readonly double priceEggs = 65.00;
 
+namespace HomeAppliancesStore
+{    class Program
+    {
         static void Main(string[] args)
         {
-            Console.OutputEncoding = System.Text.Encoding.UTF8;
-            ShowMainMenu();
+            Console.Title = "Магазин побутової техніки";
+            ShowMenu();
         }
-
-        static void ShowMainMenu()
+        static void ShowMenu()
         {
-            Console.Clear();
-            Console.WriteLine("================================================");
-            Console.WriteLine("   Головне меню 'Фермерського магазину'");
-            Console.WriteLine("================================================");
-            Console.WriteLine("Оберіть опцію:");
-            Console.WriteLine("1. Переглянути товари та ціни");
-            Console.WriteLine("2. Розрахувати нову покупку");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("\n--- ГОЛОВНЕ МЕНЮ ---");
+            Console.ResetColor();
+            Console.WriteLine("1. Перегляд товарів");
+            Console.WriteLine("2. Розрахувати покупку");
             Console.WriteLine("3. Інформація про магазин");
             Console.WriteLine("4. Налаштування");
-            Console.WriteLine("0. Вихід з програми");
+            Console.WriteLine("0. Вихід");
             Console.Write("Ваш вибір: ");
 
-            string input = Console.ReadLine()!;
             int choice;
-
-            if (!int.TryParse(input, out choice))
+            try
             {
-                Console.WriteLine("Помилка! Введіть число від 0 до 4.");
-                Pause();
-                ShowMainMenu();
+                choice = Convert.ToInt32(Console.ReadLine());
+            }
+            catch (FormatException)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Помилка: введено не число!");
+                Console.ResetColor();
+                ShowMenu();
                 return;
             }
 
@@ -49,102 +46,98 @@ namespace FarmerMarketApp
                     CalculatePurchase();
                     break;
                 case 3:
-                    ShowStoreInfo();
+                    ShowShopInfo();
                     break;
                 case 4:
-                    ShowSettings();
+                    OpenSettings();
                     break;
                 case 0:
-                    Console.WriteLine("\nДякуємо, що завітали! До побачення!");
-                    return;
+                    Console.WriteLine("Вихід з програми...");
+                    return; 
                 default:
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Невірний вибір! Спробуйте ще раз.");
+                    Console.ResetColor();
                     break;
             }
 
-            Pause();
-            ShowMainMenu();
+            ShowMenu();
         }
 
         static void ShowProducts()
         {
-            Console.Clear();
-            Console.WriteLine("--- Наші товари ---");
-            Console.WriteLine("1. Яблука - " + priceApples + " грн/кг");
-            Console.WriteLine("2. Молоко - " + priceMilk + " грн/пляшка");
-            Console.WriteLine("3. Яйця (10 шт) - " + priceEggs + " грн/уп");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("\n--- Наявні товари ---");
+            Console.ResetColor();
+            Console.WriteLine("1. Телевізор Samsung (15000 грн)");
+            Console.WriteLine("2. Холодильник Bosch (22000 грн)");
+            Console.WriteLine("3. Пральна машина LG (18500 грн)");
         }
 
         static void CalculatePurchase()
         {
-            Console.Clear();
-            Console.WriteLine("--- Розрахунок нової покупки ---");
+            Console.WriteLine("\n--- Розрахунок покупки ---");
+            
+            double priceTv = 15000.00;
+            double priceFridge = 22000.00;
+            double priceWasher = 18500.00;
 
             try
             {
-                Console.Write("Введіть кількість яблук (кг): ");
-                double qtyApples = Convert.ToDouble(Console.ReadLine());
+                Console.WriteLine("Введіть кількість телевізорів:");
+                int countTv = Convert.ToInt32(Console.ReadLine());
 
-                Console.Write("Введіть кількість пляшок молока: ");
-                int qtyMilk = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("Введіть кількість холодильників:");
+                int countFridge = Convert.ToInt32(Console.ReadLine());
 
-                Console.Write("Введіть кількість упаковок яєць: ");
-                int qtyEggs = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("Введіть кількість пральних машин:");
+                int countWasher = Convert.ToInt32(Console.ReadLine());
 
-                double totalApples = qtyApples * priceApples;
-                double totalMilk = qtyMilk * priceMilk;
-                double totalEggs = qtyEggs * priceEggs;
+                double widthTv = 90; 
+                double heightTv = 50; 
+                double diagonal = Math.Sqrt(Math.Pow(widthTv, 2) + Math.Pow(heightTv, 2));
 
-                double finalTotal = totalApples + totalMilk + totalEggs;
-                double roundedFinalTotal = Math.Round(finalTotal, 2);
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("Довідка: діагональ телевізорів = " + Math.Round(diagonal, 1) + " см");
+                Console.ResetColor();
 
-                double testNumber = 9;
-                double sqrtResult = Math.Sqrt(testNumber);
-                double powResult = Math.Pow(2, 3);
+                double totalSum = (priceTv * countTv) + (priceFridge * countFridge) + (priceWasher * countWasher);
 
-                Console.WriteLine("\n---------------------------------------------");
-                Console.WriteLine("           ВАШЕ ЗАМОВЛЕННЯ");
-                Console.WriteLine("-----------------------------------------------");
-                Console.WriteLine("Яблука: " + totalApples + " грн");
-                Console.WriteLine("Молоко: " + totalMilk + " грн");
-                Console.WriteLine("Яйця: " + totalEggs + " грн");
-                Console.WriteLine("-----------------------------------------------");
-                Console.WriteLine("Загальна сума (не округлена): " + finalTotal + " грн");
-                Console.WriteLine("ЗАГАЛЬНА СУМА ДО СПЛАТИ (округлена): " + roundedFinalTotal + " грн");
+                Random rnd = new Random();
+                int discountPercent = rnd.Next(1, 15);
+                double discountAmount = totalSum * discountPercent / 100;
+                double finalPrice = totalSum - discountAmount;
 
-                Console.WriteLine("\n--- Демонстрація Math ---");
-                Console.WriteLine("Корінь з " + testNumber + " = " + sqrtResult);
-                Console.WriteLine("2 в 3 степені = " + powResult);
+                Console.WriteLine("------------------------------");
+                Console.WriteLine("Сума без знижки: " + totalSum + " грн");
+                
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Знижка (" + discountPercent + "%): " + Math.Round(discountAmount, 2) + " грн");
+                Console.WriteLine("ДО СПЛАТИ: " + Math.Round(finalPrice, 2) + " грн");
+                Console.ResetColor();
             }
             catch (FormatException)
             {
-                Console.WriteLine("\nПомилка вводу! Ви ввели не число. Розрахунок скасовано.");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Помилка: введено некоректне значення кількості!");
+                Console.ResetColor();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"\nСталася непередбачена помилка: {ex.Message}");
+                Console.WriteLine("Сталася помилка: " + ex.Message);
             }
         }
-
-        static void ShowStoreInfo()
+        static void ShowShopInfo()
         {
-            Console.Clear();
-            Console.WriteLine("--- Інформація про магазин ---");
-            Console.WriteLine("Наша адреса: с. Щасливе, вул. Фермерська, 1.");
-            Console.WriteLine("Цей розділ ще доповнюється.");
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.WriteLine("\nФункція 'Інформація про магазин' знаходиться в розробці...");
+            Console.ResetColor();
         }
-
-        static void ShowSettings()
+        static void OpenSettings()
         {
-            Console.Clear();
-            Console.WriteLine("--- Налаштування ---");
-            Console.WriteLine("Функція в розробці.");
-        }
-
-        static void Pause()
-        {
-            Console.WriteLine("\nНатисніть будь-яку клавішу, щоб повернутися до меню...");
-            Console.ReadKey();
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.WriteLine("\nФункція 'Налаштування' знаходиться в розробці...");
+            Console.ResetColor();
         }
     }
 }
